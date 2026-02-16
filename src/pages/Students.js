@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import StudentComponent from '../components/StudentComponent';
+import theme from '../theme';
 
 function Students() {
   const [showAll, setShowAll] = useState(true);
@@ -18,24 +19,37 @@ function Students() {
   const visibleStudents = showAll ? students : students.filter(s => s.course === 'BS Information Technology');
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Students</h2>
-      <p>These are the real students stored in the application.</p>
+    <div style={{ ...theme.styles.pageContainer, backgroundColor: theme.colors.bgMain, minHeight: '100vh' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3rem' }}>
+        <div>
+          <h2 style={{ fontSize: '2.5rem', fontWeight: 800, color: theme.colors.textMain, marginBottom: '0.5rem' }}>Student Directory</h2>
+          <p style={{ color: theme.colors.textMuted, margin: 0 }}>Browse and filter through our list of currently enrolled students.</p>
+        </div>
 
-      <button
-        onClick={() => setShowAll(!showAll)}
-        style={{ padding: '0.5rem 1rem', cursor: 'pointer', marginBottom: '1rem' }}
-      >
-        {showAll ? 'Show BSIT Only' : 'Show All Students'}
-      </button>
+        <button
+          onClick={() => setShowAll(!showAll)}
+          style={{
+            ...theme.styles.btn,
+            backgroundColor: showAll ? 'white' : theme.colors.primary,
+            color: showAll ? theme.colors.textMain : 'white',
+            borderColor: showAll ? theme.colors.border : theme.colors.primary,
+            padding: '0.75rem 1.5rem',
+            boxShadow: theme.shadows.sm,
+          }}
+          onMouseOver={(e) => {
+            if (showAll) e.target.style.backgroundColor = '#f1f5f9';
+            else e.target.style.backgroundColor = theme.colors.primaryHover;
+          }}
+          onMouseOut={(e) => {
+            if (showAll) e.target.style.backgroundColor = 'white';
+            else e.target.style.backgroundColor = theme.colors.primary;
+          }}
+        >
+          {showAll ? 'Filter BSIT Only' : 'Show All Students'}
+        </button>
+      </div>
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '20px',
-        }}
-      >
+      <div style={{ ...theme.styles.grid }}>
         {visibleStudents.map(student => (
           <StudentComponent
             key={student.id}
